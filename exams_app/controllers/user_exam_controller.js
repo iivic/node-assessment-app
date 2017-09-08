@@ -33,16 +33,11 @@ function showQuestions (req, res) {
 
 function saveUserAnswers (req, res) {
   const data = req.body
-  const arr = []
 
   for (let i = 0; i < data.question_ids.length; i++) {
-    arr.push(i)
-  }
-
-  Promise.all(arr.map(i => {
     UserAnswer.forge({user_id: req.user.id, question_id: data.question_ids[i], text: data.answers[i]}).save()
     User.where({id: req.user.id}).fetch().then(user => user.exams().attach([data.exam_id]))
-  }))
+  }
 
   res.redirect('/dashboard')
 }
