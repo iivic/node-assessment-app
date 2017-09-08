@@ -1,0 +1,28 @@
+extends ../main.pug
+
+block content
+  if !exams
+    p No data available
+  else
+    button
+      a(href='/exams/create') New Exam
+    table
+      tr
+        th id
+        th title
+        th start datetime
+        th end datetime
+        th created
+        th updated
+      each exam in exams
+        tr
+          td #{exam.attributes.id}
+          td
+            a(href='/exams/' + exam.attributes.id) #{exam.attributes.title}
+          td #{exam.attributes.start_datetime}
+          td #{exam.attributes.end_datetime}
+          td #{exam.attributes.created_at}
+          td #{exam.attributes.updated_at}
+          td
+            button
+              a(href='/exams/delete/' + exam.attributes.id) Delete Exam

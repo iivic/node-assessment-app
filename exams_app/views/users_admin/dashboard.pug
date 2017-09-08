@@ -1,0 +1,28 @@
+extends ../main.pug
+
+block content
+  if !users
+    p No data available
+  else
+    button
+      a(href='users/create') New User
+    table
+      tr
+        th id
+        th username
+        th admin
+        th professor
+        th created
+        th updated
+      each user in users
+        tr
+          td #{user.attributes.id}
+          td
+            a(href='/users/' + user.attributes.id) #{user.attributes.username}
+          td #{user.attributes.is_admin}
+          td #{user.attributes.is_professor}
+          td #{user.attributes.created_at}
+          td #{user.attributes.updated_at}
+          td
+            button
+              a(href='/users/delete/' + user.attributes.id) Delete User

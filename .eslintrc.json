@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "prefer-const": ["error"]
+  },
+  "globals": {
+    "$": true,
+    "_": true
+  },
+  "extends": "standard"
+}

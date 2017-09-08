@@ -1,0 +1,93 @@
+extends ../main.pug
+
+block content
+  if exam
+    h1 Update Exam #{exam.title}
+  else
+    h1 Create New Exam
+  form(action=(exam ? '/exams/' + exam.id : '/exams/create')
+       method='POST')
+    label(for='title') Title:
+    input(type='text' name='title' required
+      value=(exam ? exam.title : ''))
+    br
+    label(for='start_datetime') Start Date:
+    input(type='datetime-local' name='start_datetime' required)
+    br
+    label(for='end_datetime') End Date:
+    input(type='datetime-local' name='end_datetime' required)
+    br
+
+    if exam
+      button(type='submit') Update Exam
+    else
+      button(type='submit') Create Exam
+
+
+  if exam
+    h2 Questions
+    form(action='/questions/create' method='POST')#questionForm
+      input(type='number' name='exam_id' hidden value=exam.id)
+      label(for='points') Points:
+      input(type='number' min='0' name='points' required)
+      br
+      label(for='description') Question:
+      textarea(type='text' name='description' required)
+      br
+      label(for='question_type') Question Type:
+      input(type='radio' name='question_type' value='text_input' checked)
+      | Text Input
+      input(type='radio' name='question_type' value='true_false')
+      | Yes/No
+      input(type='radio' name='question_type' value='multi_choice' disabled)
+      | Multi Choice
+      br
+      div#questionAnswer
+        label(for='answer') Answer:
+        input(type='text' name='answer' required)
+      button(type='submit') Add Question
+
+    if questions
+      div#questions
+        for question in questions
+          br
+          form(action='/questions/' + question.id method='POST')#questionEditForm
+            input(type='number' name='exam_id' hidden value=exam.id)
+            input(type='number' name='question_id' hidden value=question.id)
+            label(for='points') Points:
+            input(type='number' min='0' name='points' value=question.points required)
+            br
+            label(for='description') Question:
+            textarea(type='text' name='description' required) #{question.description}
+            br
+            label(for='question_type') Question Type:
+            input(type='radio' name='question_type' value='text_input'
+                  checked=((question.type === 'text_input') ? true : false))
+            | Text Input
+            input(type='radio' name='question_type' value='true_false'
+                  checked=((question.type === 'true_false') ? true : false))
+            | Yes/No
+            input(type='radio' name='question_type' value='multi_choice' disabled
+                  checked=((question.type === 'multi_choice') ? true : false))
+            | Multi Choice
+            br
+            div#questionAnswerEdit
+              if question.type === 'text_input'
+                label(for='answer') Answer:
+                input(type='text' name='answer' required value=question.answer)
+              else if question.type === 'true_false'
+                label(for='answer') Answer:
+                input(type='radio' name='answer' value='1'
+                      checked=(question.answer ? true : false))
+                | Yes
+                input(type='radio' name='answer' value='0'
+                      checked=(!question.answer ? true : false))
+                | No
+
+            button(type='submit') Edit Question
+          form(action='/questions/delete/' + question.id method='POST')
+            input(type='number' name='exam_id' hidden value=exam.id)
+            button(type='submit') Remove Question
+
+block scripts
+  script(src='/js/exams_admin/questions.js')

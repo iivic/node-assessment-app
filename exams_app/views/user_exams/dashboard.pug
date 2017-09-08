@@ -1,0 +1,19 @@
+extends ../main.pug
+
+block content
+  if !exams
+    p No Exams available
+  else
+    table
+      tr
+        th title
+        th Available from
+        th Due date
+      each exam in exams
+        tr
+          td #{exam.attributes.title}
+          td #{exam.attributes.start_datetime}
+          td #{exam.attributes.end_datetime}
+          td
+            button
+              a(href='/exam/' + exam.attributes.id) Take Exam

@@ -1,0 +1,32 @@
+extends ../main.pug
+
+block content
+  if tUser
+    h1 Update User #{tUser.username}
+  else
+    h1 Create New User
+  form(action=(tUser ? '/users/' + tUser.id : '/users/create')
+       method='POST')
+    label(for='username') Username:
+    input(type='text' name='username' required
+      value=(tUser ? tUser.username : ''))
+    br
+    label(for='password') Password:
+    input(type='password' name='password' required)
+    br
+    label(for='is_admin') Admin:
+    input(type='radio' name='is_admin' value='1' checked=((tUser && tUser.is_admin) ? true : false))
+    | Yes
+    input(type='radio' name='is_admin' value='0')
+    | No
+    br
+    label(for='is_professor') Professor:
+    input(type='radio' name='is_professor' value='1' checked=((tUser && tUser.is_professor) ? true : false))
+    | Yes
+    input(type='radio' name='is_professor' value='0')
+    | No
+    br
+    if tUser
+      button(type='submit') Update
+    else
+      button(type='submit') Create

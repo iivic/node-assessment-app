@@ -1,0 +1,21 @@
+extends ../main.pug
+
+block content
+  h1 #{exam.title}
+
+  form(action='/exam/save' method='POST')
+    input(type='number' name='exam_id' value=exam.id hidden)
+    for question in questions
+      div.exam_question
+        input(type='number' name='question_ids[]' value=question.attributes.id hidden)
+        h2 #{question.attributes.description}
+        if question.attributes.type === 'text_input'
+          input(type='text' name='answers[]' value='')
+        else if question.attributes.type === 'true_false'
+          input(type='radio' name='answers[]' value='1')
+          | Yes
+          input(type='radio' name='answers[]' value='0')
+          | No
+          input(type='radio' name='answers[]' value='' checked hidden)
+        p Points #{question.attributes.points}
+    button(type='submit') Done
